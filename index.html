@@ -513,9 +513,10 @@
   // ====== إشعار تلغرام ======
   // التوكن ومعرّف الدردشة مُخزَّنان مُرمَّزَين بـ Base64 لتجنّب سحبهما تلقائيًا من GitHub (secret scanning).
   // ملاحظة أمنية: يبقى التوكن قابلًا للاستخراج من كود الصفحة؛ الأأمن مستقبلًا تمريره عبر خادم.
-  const TG_BOT_TOKEN = atob("Nzc0OTYxMDMxMzpBQUVZbUJVNXlQWkprUkpEVTkwc0MzdF9rcmVRdEJzWjNBdw=="); // = 7749610313:AAEYmBU5...kreQtBsZ3Aw (التوكن الذي أرسلته لي)
-  // إن لم يعمل التوكن أعلاه، فالتوكن الآخر (من موقع dr-hani) هو البديل — استبدل السطر أعلاه بهذا:
-  // const TG_BOT_TOKEN = atob("Nzc0OTYxMDMxMzpBQUhwZ0lqTHpIc0lWdDVJOHZ4VFdjSmV4dVBWSlZ3VEVZVQ==");
+  // التوكن المأخوذ من موقع dr-hani (المُثبَت أنه يعمل مع هذا الـ chat_id):
+  const TG_BOT_TOKEN = atob("Nzc0OTYxMDMxMzpBQUhwZ0lqTHpIc0lWdDVJOHZ4VFdjSmV4dVBWSlZ3VEVZVQ=="); // = 7749610313:AAHpgIjL...PVJVwTEYU
+  // التوكن الآخر الذي أرسلته لي (بديل إن لزم) — استبدل السطر أعلاه بهذا:
+  // const TG_BOT_TOKEN = atob("Nzc0OTYxMDMxMzpBQUVZbUJVNXlQWkprUkpEVTkwc0MzdF9rcmVRdEJzWjNBdw==");
   const TG_CHAT_ID   = atob("MjExNjUxMTg4Mg==");  // = 2116511882 (من موقعك الثاني)
 
   const T = {
