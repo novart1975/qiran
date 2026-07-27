@@ -65,6 +65,20 @@
     background-blend-mode:overlay;
     opacity:.9;
   }
+  /* ---------- TOP BANNER ---------- */
+  .top-banner{display:block;max-width:1080px;margin:0 auto;line-height:0;position:relative}
+  .top-banner img{width:100%;height:auto;display:block}
+  .top-banner::after{
+    content:"سجّل الآن ◄";
+    position:absolute;bottom:0;left:0;right:0;
+    text-align:center;font-family:'El Messiri',serif;font-size:.9rem;
+    color:#fff;background:linear-gradient(0deg,rgba(16,64,59,.55),transparent);
+    padding:26px 0 8px;opacity:0;transition:opacity .3s;pointer-events:none;
+  }
+  .top-banner:hover::after{opacity:1}
+  .top-banner:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+  @media (max-width:560px){ .top-banner::after{display:none} }
+
   .wrap{max-width:920px;margin:0 auto;padding:0 22px}
 
   /* ---------- HERO ---------- */
@@ -281,6 +295,11 @@
 <body>
 <div class="ornament-band"></div>
 
+<!-- ============ TOP BANNER ============ -->
+<a class="top-banner" href="#gateway" aria-label="سجّل الآن في منصة زوجة">
+  <img src="banner.png" alt="منصة زوجة — للزواج الجادّ والأسري" width="1039" height="480">
+</a>
+
 <header class="hero">
   <div class="wrap">
     <div class="arch-mark" aria-hidden="true">
@@ -319,7 +338,7 @@
         <p>عند وجود توافق، نتواصل معك أولًا، ولا تُشارك بياناتك إلا بموافقتك.</p>
       </div>
     </div>
-    <p class="trust">🔒 خصوصيتك : بيانات تسجيلك تُستخدم لغرض التعارف فقط، ولا تُشارك مع أي جهة دون إذنك، ويمكنك طلب حذفها في أي وقت. ونسجّل إحصاءات زيارة عامّة  لتحسين الخدمة.</p>
+    <p class="trust">🔒 خصوصيتك أمانة: بيانات تسجيلك تُستخدم لغرض التعارف فقط، ولا تُشارك مع أي جهة دون إذنك، ويمكنك طلب حذفها في أي وقت. ونسجّل إحصاءات زيارة عامّة (الدولة والمدينة التقريبية ونوع الجهاز) لتحسين الخدمة.</p>
   </div>
 </section>
 
@@ -557,7 +576,7 @@
             <div class="field full">
               <label class="consent">
                 <input type="checkbox" name="consent" id="consent" required>
-                <span>أوافق على حفظ بياناتي ومعالجتها لغرض التعارف بهدف الزواج، وعلى التواصل معي بشأن ذلك.</span>
+                <span>أوافق على حفظ بياناتي ومعالجتها  وعلى التواصل معي بشأن ذلك.</span>
               </label>
               <div class="err">يجب الموافقة للمتابعة</div>
               <p class="privacy-line">🔒 سياسة الخصوصية: تُستخدم بياناتك لغرض التعارف فقط، ولا تُشارك مع أي جهة خارجية دون إذنك، ويمكنك طلب حذفها في أي وقت عبر مراسلتنا.</p>
@@ -585,7 +604,8 @@
   <div class="wrap">
     <div class="seal">✓</div>
     <h2>تمّ استلام بياناتك</h2>
-    <div class="ref" id="refNumber"></div> — يمكنك إرسالها إلى إدارة المنصّة عبر البريد لإتمام تسجيلك.</p>
+    <div class="ref" id="refNumber"></div>
+    <p>— يمكنك إرسالها إلى إدارة المنصّة عبر البريد لإتمام تسجيلك.</p>
     <div class="summary" id="summaryBox"></div>
     <div class="actions">
       <a href="#" class="btn-fill" id="mailBtn">إرسال البيانات عبر البريد</a>
@@ -595,7 +615,7 @@
 </section>
 
 <footer>
- 
+  <p class="note">ملاحظة للمطوّر: لتفعيل إشعار تلغرام، ضع توكن البوت ومعرّف الدردشة في <code>TG_BOT_TOKEN</code> و<code>TG_CHAT_ID</code> أعلى الكود. تنبيه: التوكن في كود المتصفّح مكشوف للزوّار؛ الأأمن تمريره عبر خادم أو خدمة نماذج. إشعار الزيارة يُرسل مرّة واحدة لكل جلسة، ويسجّل الموقع التقريبي (دولة/مدينة عبر خدمة IP) عند تفعيل <code>INCLUDE_LOCATION</code>؛ اجعله <code>false</code> لإيقاف تسجيل الموقع.</p>
   <p>قِـران © 2026 — منصّة للزواج الجادّ · نحفظ خصوصيتك ونحترم خيارك</p>
 </footer>
 
