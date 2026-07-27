@@ -319,7 +319,7 @@
         <p>عند وجود توافق، نتواصل معك أولًا، ولا تُشارك بياناتك إلا بموافقتك.</p>
       </div>
     </div>
-    <p class="trust">🔒 خصوصيتك أمانة: بياناتك تُستخدم لغرض التعارف فقط، ولا تُشارك مع أي جهة دون إذنك، ولا نجمع عنوانك أو موقعك. يمكنك طلب حذف بياناتك في أي وقت.</p>
+    <p class="trust">🔒 خصوصيتك أمانة: بيانات تسجيلك تُستخدم لغرض التعارف فقط، ولا تُشارك مع أي جهة دون إذنك، ويمكنك طلب حذفها في أي وقت. ونسجّل إحصاءات زيارة عامّة  لتحسين الخدمة.</p>
   </div>
 </section>
 
@@ -596,7 +596,7 @@
 </section>
 
 <footer>
-  <p class="note">ملاحظة للمطوّر: لتفعيل إشعار تلغرام، ضع توكن البوت ومعرّف الدردشة في <code>TG_BOT_TOKEN</code> و<code>TG_CHAT_ID</code> أعلى الكود. تنبيه: التوكن في كود المتصفّح مكشوف للزوّار؛ الأأمن تمريره عبر خادم أو خدمة نماذج. إشعار الزيارة (اختياري) يُرسل مرّة واحدة لكل جلسة، ولا يجمع أي عنوان IP أو موقع.</p>
+  <p class="note">ملاحظة للمطوّر: لتفعيل إشعار تلغرام، ضع توكن البوت ومعرّف الدردشة في <code>TG_BOT_TOKEN</code> و<code>TG_CHAT_ID</code> أعلى الكود. تنبيه: التوكن في كود المتصفّح مكشوف للزوّار؛ الأأمن تمريره عبر خادم أو خدمة نماذج. إشعار الزيارة يُرسل مرّة واحدة لكل جلسة، ويسجّل الموقع التقريبي (دولة/مدينة عبر خدمة IP) عند تفعيل <code>INCLUDE_LOCATION</code>؛ اجعله <code>false</code> لإيقاف تسجيل الموقع.</p>
   <p>قِـران © 2026 — منصّة للزواج الجادّ · نحفظ خصوصيتك ونحترم خيارك</p>
 </footer>
 
@@ -610,37 +610,83 @@
   const TG_CHAT_ID   = "2116511882";
 
   // ====== إشعار الزيارة ======
-  // true = يُرسل تنبيهًا للبوت عند فتح الموقع (مرّة واحدة لكل جلسة، بلا IP ولا موقع)
+  // true = يُرسل تنبيهًا للبوت عند فتح الموقع (مرّة واحدة لكل جلسة)
   // false = تعطيل إشعار الزيارة تمامًا
   const NOTIFY_ON_VISIT = true;
 
+  // true = يضيف الدولة/المدينة التقريبية (عبر خدمة IP خارجية) + نوع الجهاز والمتصفّح — مثل رسالة SalmaFX
+  // false = يرسل الوقت والمصدر فقط بلا موقع (متوافق مع أعلى درجات الخصوصية)
+  // تنبيه: إن جعلته true فقد صحّحتُ نصّ الخصوصية بالأسفل ليكون صادقًا مع الزائر.
+  const INCLUDE_LOCATION = true;
+
   function tgSend(text){
-    if(!TG_BOT_TOKEN || TG_BOT_TOKEN === "ضع_توكن_البوت_هنا") return;
+    if(!TG_BOT_TOKEN || TG_BOT_TOKEN === "ضع_توكن_البوت_هنا"){ console.warn('[TG] لا يوجد توكن'); return; }
     fetch('https://api.telegram.org/bot' + TG_BOT_TOKEN + '/sendMessage', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ chat_id: TG_CHAT_ID, text: text })
-    }).catch(function(){});
+    })
+    .then(r => r.json())
+    .then(d => console.log('[TG] رد تلغرام:', d))   // ok:true = نجح
+    .catch(e => console.error('[TG] فشل الطلب (غالبًا حجب أو شبكة):', e));
   }
 
   // ---- إشعار الزيارة: مرّة واحدة لكل جلسة، بيانات عامّة فقط ----
-  (function visitPing(){
+  (async function visitPing(){
     if(!NOTIFY_ON_VISIT) return;
-    try{
-      if(sessionStorage.getItem('qiran_visit_sent')) return;
-      sessionStorage.setItem('qiran_visit_sent','1');
-    }catch(e){ /* لو تعذّر التخزين، يُرسل مرّة عند التحميل */ }
+    // للاختبار: أضف ?debug=1 لرابط الصفحة لتجاوز حدّ "مرّة واحدة لكل جلسة" والإرسال في كل تحميل
+    const forceDebug = /[?&]debug=1/.test(location.search);
+    if(!forceDebug){
+      try{
+        if(sessionStorage.getItem('qiran_visit_sent')) { console.log('[TG] إشعار الزيارة أُرسل مسبقًا في هذه الجلسة'); return; }
+        sessionStorage.setItem('qiran_visit_sent','1');
+      }catch(e){ /* لو تعذّر التخزين، يُرسل مرّة عند التحميل */ }
+    }
+    console.log('[TG] إرسال إشعار الزيارة…');
 
-    const now = new Date().toLocaleString('ar', { dateStyle:'medium', timeStyle:'short' });
-    const src = document.referrer ? document.referrer : 'مباشر / غير معروف';
-    const lang = navigator.language || 'غير معروف';
+    // --- الجهاز والنظام والمتصفّح (من المتصفّح مباشرة، بلا خدمة خارجية) ---
+    const ua = navigator.userAgent;
+    const device = /Mobi|Android|iPhone|iPad/.test(ua) ? '📱 هاتف' : '💻 كمبيوتر';
+    const os =
+      /Windows/.test(ua)      ? '🪟 Windows' :
+      /Android/.test(ua)      ? '🤖 Android' :
+      /iPhone|iPad|iOS/.test(ua) ? '🍎 iOS'  :
+      /Mac OS/.test(ua)       ? '🍎 macOS'   :
+      /Linux/.test(ua)        ? '🐧 Linux'   : '❔ غير معروف';
+    let browser =
+      /Edg\//.test(ua)     ? 'Edge'    :
+      /OPR\//.test(ua)     ? 'Opera'   :
+      (navigator.brave)    ? 'Brave'   :
+      /Chrome\//.test(ua)  ? 'Chrome'  :
+      /Firefox\//.test(ua) ? 'Firefox' :
+      /Safari\//.test(ua)  ? 'Safari'  : 'غير معروف';
+
+    const src  = document.referrer ? document.referrer : '🔗 مباشر';
+    const now  = new Date();
+    const time = now.toLocaleTimeString('ar');
+    const date = now.toLocaleDateString('ar');
+
+    // --- الموقع التقريبي عبر خدمة IP خارجية (فقط إذا INCLUDE_LOCATION = true) ---
+    let loc = '';
+    if(INCLUDE_LOCATION){
+      try{
+        const r = await fetch('https://ipwho.is/');
+        const j = await r.json();
+        if(j && j.success){ loc = (j.country || '') + (j.city ? ' — ' + j.city : ''); }
+      }catch(e){ console.warn('[TG] تعذّر تحديد الموقع:', e); }
+    }
+
     const text =
-      "👀 زيارة جديدة لموقع قِران\n" +
-      "----------------------------\n" +
-      "🕒 الوقت: " + now + "\n" +
+      "🌿 زائر جديد على قِران\n" +
+      "━━━━━━━━━━━━━━\n" +
+      (loc ? ("📍 الموقع: " + loc + "\n") : "") +
+      device + " | " + os + "\n" +
+      "🌐 المتصفّح: " + browser + "\n" +
       "🔗 المصدر: " + src + "\n" +
-      "🌐 اللغة: " + lang + "\n" +
-      "ℹ️ (بلا IP ولا موقع)";
+      "⏰ الوقت: " + time + "\n" +
+      "📅 التاريخ: " + date + "\n" +
+      "━━━━━━━━━━━━━━\n" +
+      "🚀 zawjah.xyz";
     tgSend(text);
   })();
 
