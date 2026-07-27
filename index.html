@@ -357,15 +357,6 @@
               <option>سمراء</option><option>سمراء داكنة</option>
             </select>
           </div>
-          <div class="field full" id="hijabWrap" style="display:none">
-            <label>اللباس / الحجاب <span class="req">*</span></label>
-            <div class="radios" id="hijabRadios">
-              <label><input type="radio" name="hijab" value="منقبة"><span>منقبة</span></label>
-              <label><input type="radio" name="hijab" value="محجبة"><span>محجبة</span></label>
-              <label><input type="radio" name="hijab" value="بدون حجاب"><span>بدون حجاب</span></label>
-            </div>
-            <div class="err">يرجى اختيار اللباس</div>
-          </div>
         </div>
       </fieldset>
 
@@ -441,29 +432,9 @@
         </div>
       </fieldset>
 
-      <!-- 5) About & aspirations -->
+      <!-- 5) Contact -->
       <fieldset>
-        <legend><span class="num">٥</span> نبذة وتطلّعات</legend>
-        <div class="grid">
-          <div class="field full">
-            <label id="lbl-about">اكتب عن نفسك <span class="req">*</span></label>
-            <textarea name="about" data-label="نبذة عن النفس" required placeholder="تحدّث عن شخصيتك وأخلاقك واهتماماتك وما تراه مهمًّا في حياتك…"></textarea>
-            <div class="err">يرجى كتابة نبذة عن نفسك</div>
-          </div>
-          <div class="field full">
-            <label id="lbl-partner">الصفات التي تتمناها في شريكة حياتك</label>
-            <textarea name="partnerQualities" data-label="الصفات المرغوبة في الشريك" placeholder="اذكر أهم الصفات التي تبحث عنها في شريك حياتك…"></textarea>
-          </div>
-          <div class="field full">
-            <label>أي ملاحظات خاصة؟</label>
-            <textarea name="notes" data-label="ملاحظات خاصة" placeholder="أي شيء تودّ إضافته أو توضيحه (اختياري)"></textarea>
-          </div>
-        </div>
-      </fieldset>
-
-      <!-- 6) Contact -->
-      <fieldset>
-        <legend><span class="num">٦</span> وسيلة التواصل</legend>
+        <legend><span class="num">٥</span> وسيلة التواصل</legend>
         <div class="grid">
           <div class="field full">
             <label>البريد الإلكتروني <span class="req">*</span></label>
@@ -503,6 +474,7 @@
 </section>
 
 <footer>
+  <p class="note">ملاحظة للمطوّر: لتفعيل إشعار تلغرام، ضع توكن البوت ومعرّف الدردشة في <code>TG_BOT_TOKEN</code> و<code>TG_CHAT_ID</code> أعلى الكود. تنبيه: التوكن في كود المتصفّح مكشوف للزوّار؛ الأأمن تمريره عبر خادم أو خدمة نماذج. لا تُرسَل أي بيانات إلا بعد موافقة المستخدم، ولا يُجمع أي عنوان IP أو موقع.</p>
   <p>قِـران © 2026 — منصّة للزواج الجادّ · نحفظ خصوصيتك ونحترم خيارك</p>
 </footer>
 
@@ -510,14 +482,12 @@
   // ====== بريد استقبال طلبات منصّتك ======
   const SITE_EMAIL = "info@qiran-example.com";
 
-  // ====== إشعار تلغرام ======
-  // التوكن ومعرّف الدردشة مُخزَّنان مُرمَّزَين بـ Base64 لتجنّب سحبهما تلقائيًا من GitHub (secret scanning).
-  // ملاحظة أمنية: يبقى التوكن قابلًا للاستخراج من كود الصفحة؛ الأأمن مستقبلًا تمريره عبر خادم.
-  // التوكن المأخوذ من موقع dr-hani (المُثبَت أنه يعمل مع هذا الـ chat_id):
-  const TG_BOT_TOKEN = atob("Nzc0OTYxMDMxMzpBQUhwZ0lqTHpIc0lWdDVJOHZ4VFdjSmV4dVBWSlZ3VEVZVQ=="); // = 7749610313:AAHpgIjL...PVJVwTEYU
-  // التوكن الآخر الذي أرسلته لي (بديل إن لزم) — استبدل السطر أعلاه بهذا:
-  // const TG_BOT_TOKEN = atob("Nzc0OTYxMDMxMzpBQUVZbUJVNXlQWkprUkpEVTkwc0MzdF9rcmVRdEJzWjNBdw==");
-  const TG_CHAT_ID   = atob("MjExNjUxMTg4Mg==");  // = 2116511882 (من موقعك الثاني)
+  // ====== إشعار تلغرام (اختياري) ======
+  // ضع توكن البوت الذي حصلت عليه من BotFather ومعرّف الدردشة هنا.
+  // ملاحظة أمنية: هذا التوكن سيكون مكشوفًا في كود الصفحة لأي زائر.
+  // الأأمن مستقبلًا تمريره عبر خادم. لتعطيل الإشعار اترك القيمة كما هي.
+  const TG_BOT_TOKEN = "8943494370:AAH2qTyy_q7MVEWkhCffTSiFlv0tVr9z-8g";
+  const TG_CHAT_ID   = "2116511882";
 
   const T = {
     male:{
@@ -526,9 +496,6 @@
       maritalLbl:'الحالة الاجتماعية <span class="req">*</span>',
       maritalOpts:["أعزب","مطلّق","أرمل","متزوّج"],
       polyLbl:"هل ترغب في التعدّد؟",
-      aboutLbl:'اكتب عن نفسك <span class="req">*</span>',
-      partnerLbl:"الصفات التي تتمناها في شريكة حياتك",
-      female:false,
       accent:"var(--green)", accentDeep:"var(--green-deep)", accentSoft:"var(--green-soft)"
     },
     female:{
@@ -537,9 +504,6 @@
       maritalLbl:'الحالة الاجتماعية <span class="req">*</span>',
       maritalOpts:["عزباء","مطلّقة","أرملة","متزوّجة"],
       polyLbl:"هل تقبلين بالتعدّد؟",
-      aboutLbl:'اكتبي عن نفسك <span class="req">*</span>',
-      partnerLbl:"الصفات التي تتمنينها في شريك حياتك",
-      female:true,
       accent:"var(--rose)", accentDeep:"#6E2C40", accentSoft:"var(--rose-soft)"
     }
   };
@@ -558,14 +522,6 @@
     document.getElementById('lbl-name').innerHTML = t.nameLbl;
     document.getElementById('lbl-marital').innerHTML = t.maritalLbl;
     document.getElementById('lbl-poly').textContent = t.polyLbl;
-    document.getElementById('lbl-about').innerHTML = t.aboutLbl;
-    document.getElementById('lbl-partner').textContent = t.partnerLbl;
-
-    // حقل الحجاب/النقاب يظهر للنساء فقط
-    const hijabWrap = document.getElementById('hijabWrap');
-    hijabWrap.style.display = t.female ? 'block' : 'none';
-    const hijabInput = document.querySelector('input[name="hijab"]');
-    if(hijabInput) hijabInput.required = t.female;
 
     const sel = document.querySelector('select[name="marital"]');
     sel.innerHTML = '<option value="">اختر…</option>' + t.maritalOpts.map(o=>`<option>${o}</option>`).join('');
@@ -613,7 +569,6 @@
     required.forEach(el=>{
       let bad;
       if(el.type==='checkbox'){ bad = !el.checked; }
-      else if(el.type==='radio'){ bad = !form.querySelector('input[name="'+el.name+'"]:checked'); }
       else { bad = !el.value.trim(); }
       if(el.name==='age'){ const n=+el.value; if(n<18||n>90||!el.value) bad=true; }
       if(el.type==='email'){ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value)) bad=true; }
@@ -637,10 +592,6 @@
       const lbl = T[currentGender].polyLbl.replace(/؟$/,'');
       data.push([lbl, poly.value]);
     }
-    if(currentGender==='female'){
-      const hijab = form.querySelector('input[name="hijab"]:checked');
-      if(hijab){ data.push(['اللباس / الحجاب', hijab.value]); }
-    }
 
     // render summary
     const box = document.getElementById('summaryBox');
@@ -653,20 +604,13 @@
       `mailto:${SITE_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
     // إشعار تلغرام — يُرسل فقط بعد موافقة المستخدم، ويحوي بيانات النموذج فقط (لا IP ولا موقع)
-    const tokenReady = TG_BOT_TOKEN && TG_BOT_TOKEN.indexOf(':') > -1;
-    const chatReady  = TG_CHAT_ID && TG_CHAT_ID !== "ضع_معرّف_الدردشة_هنا";
-    if(tokenReady && chatReady){
+    if(TG_BOT_TOKEN && TG_BOT_TOKEN !== "ضع_توكن_البوت_هنا"){
       const text = "🌿 " + subject + "\n----------------------------\n" + body;
       fetch('https://api.telegram.org/bot' + TG_BOT_TOKEN + '/sendMessage', {
         method:'POST',
         headers:{'Content-Type':'application/json'},
         body: JSON.stringify({ chat_id: TG_CHAT_ID, text: text })
-      })
-      .then(r=>r.json())
-      .then(res=>{ if(!res.ok) console.warn('Telegram error:', res.description); })
-      .catch(err=>console.warn('Telegram network error:', err));
-    } else if(tokenReady && !chatReady){
-      console.warn('التوكن جاهز، لكن ينقص TG_CHAT_ID — لن يُرسَل إشعار تلغرام حتى تضعه.');
+      }).catch(function(){});
     }
 
     document.getElementById('formPanel').classList.remove('active');
